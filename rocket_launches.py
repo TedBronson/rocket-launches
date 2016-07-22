@@ -53,6 +53,25 @@ def number_of_launches_per_family(rocket_families_list):
         print(rocket_family + ' was launched: ' + str(number_of_launches) + ' times')
 
 
+def launches_in_period(today_date='2016-07-22', future_date='2016-07-30'):  # Add actual calculated dates here
+    upcoming_launches = r.get('https://launchlibrary.net/1.2/launch/{0}/{1}'.format(today_date, future_date))
+    upcoming_launches_dict = upcoming_launches.json()
+    if upcoming_launches_dict['count'] > 0:
+        upcoming_launches_number = upcoming_launches_dict['count']
+        launch_dict = {}
+        launch_dict['launch_name'] = upcoming_launches_dict['launches'][0]['name']
+        launch_dict['net'] = upcoming_launches_dict['launches'][0]['net']
+        launch_dict['vidURLs'] = upcoming_launches_dict['launches'][0]['vidURLs']
+        launch_dict['location_name'] = upcoming_launches_dict['launches'][0]['location']['pads'][0]['name']
+        launch_dict['rocket_name'] = upcoming_launches_dict['launches'][0]['rocket']['name']
+        launch_dict['mission_description'] = upcoming_launches_dict['launches'][0]['missions'][0]['description']
+    else:
+        # Message for no launches
+        list_of_upcoming_launches = ['No upcoming launches']
+    return list_of_upcoming_launches
+
+
+
 def main():
     base_url = 'https://launchlibrary.net/1.1/launch'
     rocket_family = 'Falcon'
@@ -65,3 +84,4 @@ def main():
 
 
 main()
+

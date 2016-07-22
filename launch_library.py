@@ -47,7 +47,7 @@ def main():
     #
     # rocket_launches.number_of_launches_per_family(rocket_families_list)
 
-    launches_tomorrow_message = rocket_launches.launches_tomorrow()
+    launches_tomorrow_message = rocket_launches.launches_in_period()
     send_email(launches_tomorrow_message)
 
 
