@@ -5,6 +5,7 @@ from dask.compatibility import FileNotFoundError
 
 import rocket_launches
 import smtplib
+import rocket_launches_in_period
 
 
 def send_email(message):
@@ -38,17 +39,8 @@ def send_email(message):
 
 
 def main():
-    # base_url = 'https://launchlibrary.net/1.1/launch'
-    # rocket_family = 'Falcon'
-    # number_of_pages = rocket_launches.get_number_of_pages(base_url, rocket_family)
-    # rocket_launches.get_list_of_launches(base_url, rocket_family, number_of_pages)
-    #
-    # rocket_families_list = rocket_launches.get_list_of_rocket_families()
-    #
-    # rocket_launches.number_of_launches_per_family(rocket_families_list)
-
-    launches_tomorrow_message = rocket_launches.launches_in_period()
+    # if rocket_launches_in_period.verify_launches_will_happen() is True:
+    launches_tomorrow_message = rocket_launches.compose_message_for_upcoming_launches(rocket_launches.launches_in_period())
     send_email(launches_tomorrow_message)
-
 
 main()

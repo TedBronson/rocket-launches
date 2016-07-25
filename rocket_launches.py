@@ -1,5 +1,6 @@
-import requests as r
 import math
+
+import requests as r
 
 
 def get_list_of_launches(base_url, rocket_family, number_of_pages):
@@ -51,57 +52,4 @@ def number_of_launches_per_family(rocket_families_list):
 
         number_of_launches = launches_of_family_json['total']
         print(rocket_family + ' was launched: ' + str(number_of_launches) + ' times')
-
-
-def launches_in_period(today_date='2016-07-23', future_date='2016-08-30'):  # Add actual calculated dates here
-    upcoming_launches = r.get('https://launchlibrary.net/1.2/launch/{0}/{1}'.format(today_date, future_date))
-    upcoming_launches_dict = upcoming_launches.json()
-    if upcoming_launches_dict['count'] > 0:
-        upcoming_launches_number = upcoming_launches_dict['count']
-        launch_list = []
-        for i in range(0, upcoming_launches_number):
-            launch_dict = {}
-            launch_dict['launch_name'] = upcoming_launches_dict['launches'][i]['name']
-            launch_dict['net'] = upcoming_launches_dict['launches'][i]['net']
-            if ['vidURLs'][0] in upcoming_launches_dict.keys():
-                launch_dict['vidURLs'] = upcoming_launches_dict['launches'][i]['vidURLs']
-            launch_dict['location_name'] = upcoming_launches_dict['launches'][i]['location']['pads'][0]['name']
-            launch_dict['rocket_name'] = upcoming_launches_dict['launches'][i]['rocket']['name']
-            if ['missions'][0] in upcoming_launches_dict.keys():
-                launch_dict['mission_description'] = upcoming_launches_dict['launches'][i]['missions'][0]['description']
-            launch_list.append(launch_dict)
-        list_of_upcoming_launches = launch_list
-    else:
-        # Message for no launches
-        list_of_upcoming_launches = ['No upcoming launches']
-    return list_of_upcoming_launches
-
-
-def compose_message_for_upcoming_launches(list_of_upcoming_launches):
-    message_constructed = ""
-    for launch, launch_info in enumerate(list_of_upcoming_launches):
-        message_constructed += "Name: " + list_of_upcoming_launches[launch]['launch_name'] + "\n"
-        message_constructed += "Launch NET: " + list_of_upcoming_launches[launch]['net'] + "\n"
-        # if ['vidURLs'][0] in list_of_upcoming_launches:
-        message_constructed += "Link for video: ".join(list_of_upcoming_launches[launch]['vidURLs']) + "\n"
-        message_constructed += "Launching from: " + list_of_upcoming_launches[launch]['location_name'] #+ "\n"
-        message_constructed += "Launch vehicle: " + list_of_upcoming_launches[launch]['rocket_name'] + "\n" + "\n"
-        # message_constructed += "Mission description: " + list_of_upcoming_launches[launch]['mission_description'] + "\n"
-    return message_constructed
-
-
-def main():
-    base_url = 'https://launchlibrary.net/1.1/launch'
-    rocket_family = 'Falcon'
-    # number_of_pages = get_number_of_pages(base_url, rocket_family)
-    # get_list_of_launches(base_url, rocket_family, number_of_pages)
-
-    print (compose_message_for_upcoming_launches(launches_in_period()))
-
-    # rocket_families_list = get_list_of_rocket_families()
-    #
-    # number_of_launches_per_family(rocket_families_list)
-
-
-main()
 
