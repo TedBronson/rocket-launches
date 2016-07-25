@@ -2,7 +2,7 @@ import requests as r
 import datetime as d
 
 
-def launches_in_period(today_date=d.date.today(), future_date=d.date.today() + d.timedelta(days=10)):
+def launches_in_period(today_date=d.date.today(), future_date=d.date.today() + d.timedelta(days=3)):
     upcoming_launches = r.get('https://launchlibrary.net/1.2/launch/{0}/{1}'.format(today_date, future_date))
     upcoming_launches_dict = upcoming_launches.json()
     if upcoming_launches_dict['count'] > 0:
@@ -44,7 +44,7 @@ def compose_message_for_upcoming_launches(list_of_upcoming_launches):
     return message_constructed
 
 
-def verify_launches_will_happen(today_date=d.date.today(), future_date=d.date.today() + d.timedelta(days=10)):
+def verify_launches_will_happen(today_date=d.date.today(), future_date=d.date.today() + d.timedelta(days=3)):
     upcoming_launches = r.get('https://launchlibrary.net/1.2/launch/{0}/{1}'.format(today_date, future_date))
     upcoming_launches_dict = upcoming_launches.json()
     if upcoming_launches_dict['count'] > 0:

@@ -1,5 +1,6 @@
 import requests as r
 import math
+import encodings
 
 from dask.compatibility import FileNotFoundError
 
@@ -9,6 +10,7 @@ import rocket_launches_in_period
 
 
 def send_email(message):
+    message = message.encode('utf8')
     # connect to the smtp server
     server = smtplib.SMTP('smtp.gmail.com', '587')
     server.starttls()
@@ -27,7 +29,7 @@ def send_email(message):
 
     # Compose a message
     message_constructed = 'Subject: Rocket launches for today \n'
-    message_constructed += 'Today we are expecting following launches \n'
+    message_constructed += 'In next 3 days we are expecting following launches: \n \n'
     message_constructed += message
 
     # Send a message
@@ -40,7 +42,7 @@ def send_email(message):
 
 def main():
     # if rocket_launches_in_period.verify_launches_will_happen() is True:
-    launches_tomorrow_message = rocket_launches.compose_message_for_upcoming_launches(rocket_launches.launches_in_period())
+    launches_tomorrow_message = rocket_launches_in_period.compose_message_for_upcoming_launches(rocket_launches_in_period.launches_in_period())
     send_email(launches_tomorrow_message)
 
 main()
