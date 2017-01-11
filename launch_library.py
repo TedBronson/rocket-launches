@@ -1,47 +1,13 @@
-from dask.compatibility import FileNotFoundError
+from rocket_launches_in_period import launches_in_period,\
+    compose_message_for_upcoming_launches,\
+    verify_launches_will_happen
 
-import smtplib
-import rocket_launches_in_period
-from email.mime.text import MIMEText
-
-
-def send_email(message):
-    message = message.encode('utf8')
-    # connect to the smtp server
-    server = smtplib.SMTP('smtp.gmail.com', '587')
-    server.starttls()
-
-    try:
-        with open('email.txt', 'r') as f:
-            content = f.readlines()
-
-    except FileNotFoundError as err:
-        print(err)
-
-    # Login
-    password = content[1]
-    from_email = content[0]
-    server.login(from_email, password)
-
-    # Compose a message
-    message_constructed = 'In next 3 days we are expecting following launches: \n \n'
-    message_constructed += message
-
-    msg = MIMEText(message_constructed)
-    msg['Subject'] = 'Rocket launches for today'
-    msg['From'] = from_email
-
-    # Send a message
-    to_email = content[2]
-    server.sendmail(from_email, to_email, msg.as_string())
-    print(msg.as_string())
-
-    server.quit()
+from emailer import send_email
 
 
 def main():
-    # if rocket_launches_in_period.verify_launches_will_happen() is True:
-    launches_tomorrow_message = rocket_launches_in_period.compose_message_for_upcoming_launches(rocket_launches_in_period.launches_in_period())
+    # if rocket_launches_in_period.verify_launches_will_happen():
+    launches_tomorrow_message = compose_message_for_upcoming_launches(launches_in_period())
     send_email(launches_tomorrow_message)
 
 main()
