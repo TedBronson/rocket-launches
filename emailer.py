@@ -5,10 +5,8 @@ from email.mime.text import MIMEText
 
 
 # Function that accepts a message and sends and email.
-# TODO: 1. Make send_email function accept subject as argument.
-# TODO: 2. Remove all message composition from send_email function
 def send_email(message):
-    message = message.encode('utf8')
+    message_body = message["message"].encode('utf8')
     # connect to the smtp server
     server = smtplib.SMTP('smtp.gmail.com', '587')
     server.starttls()
@@ -25,13 +23,13 @@ def send_email(message):
     from_email = content[0]
     server.login(from_email, password)
 
-    msg = MIMEText(message)
-    msg['Subject'] = 'Rocket launches for today'
+    msg = MIMEText(message_body)
+    msg['Subject'] = message['Subject']
     msg['From'] = from_email
 
     # Send a message
     to_email = content[2]
-    server.sendmail(from_email, to_email, msg.as_string())
+    # server.sendmail(from_email, to_email, msg.as_string())
     print(msg.as_string())
 
     server.quit()

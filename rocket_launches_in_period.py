@@ -35,11 +35,12 @@ def launches_in_period(first_date=d.date.today(), second_date=d.date.today() + d
 
 
 def compose_message_for_upcoming_launches((list_of_upcoming_launches, delta)):
-    message_constructed = ""
+    message_constructed = {}
+    message_constructed['Subject'] = 'Rocket launches for today'
     if list_of_upcoming_launches[0] != 'No upcoming launches':
         for launch, launch_info in enumerate(list_of_upcoming_launches):
             launch_path = list_of_upcoming_launches[launch]
-            message_constructed = "In next {6} days we are expecting following launches: \n \n" \
+            message_constructed['message'] = "In next {6} days we are expecting following launches: \n \n" \
                                   "Name: {0} \n" \
                                   "Launch NET: {1} \n" \
                                   "Link for video: {2} \n" \
@@ -54,8 +55,11 @@ def compose_message_for_upcoming_launches((list_of_upcoming_launches, delta)):
                 launch_path['mission_description'],
                 delta
             )
+        return message_constructed
+    else:
+        message_constructed['message'] = list_of_upcoming_launches[0]
+        return message_constructed
 
-    return message_constructed
 
 
 def verify_launches_will_happen(today_date=d.date.today(), future_date=d.date.today() + d.timedelta(days=3)):
